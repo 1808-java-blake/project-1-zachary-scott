@@ -1,5 +1,5 @@
 import * as React from "react";
-import { attemptLogin } from "../../actions/screen/screen.actions";
+import { attemptLogin } from "../../actions/login/login.actions";
 import {
   updateUsername,
   updatePassword
