@@ -5,7 +5,6 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./App.css";
 import ScreenSelector from "./components/screens/selector/screen-selector";
 import { Provider } from "react-redux";
-import Login from "./components/screens/login";
 import { store } from "./store";
 
 export default class App extends React.Component {
@@ -16,7 +15,6 @@ export default class App extends React.Component {
         <div>
           <h1> </h1>
           <ScreenSelector />
-          <Login />
         </div>
       </Provider>
     );

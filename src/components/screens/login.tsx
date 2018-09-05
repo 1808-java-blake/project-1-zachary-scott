@@ -1,5 +1,5 @@
 import * as React from "react";
-import { attemptLogin } from "../../actions/login/login.actions";
+import { fetchLogin } from "../../actions/fetch/fetch.actions";
 import {
   updateUsername,
   updatePassword
@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
 
 interface IProps {
-  attemptLogin: (username: string, password: string) => any;
+  fetchLogin: (username: string, password: string) => any;
   password: string;
   updatePassword: (password: string) => any;
   updateUsername: (username: string) => any;
@@ -35,7 +35,7 @@ class Login extends React.Component<IProps, any> {
 
   public attemptLogin(e: any) {
     e.preventDefault();
-    this.props.attemptLogin(this.props.username, this.props.password);
+    this.props.fetchLogin(this.props.username, this.props.password);
   }
 
   public render() {
@@ -90,7 +90,7 @@ const mapStateToProps = (state: IState) => {
   };
 };
 const mapDispatchToProps = {
-  attemptLogin,
+  fetchLogin,
   updatePassword,
   updateUsername
 };

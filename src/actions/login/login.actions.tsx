@@ -2,7 +2,6 @@ import { loginTypes } from "./login.types";
 import { updateScreen } from "../screen/screen.actions";
 import { IState } from "../../reducers/index";
 import { Dispatch } from "redux";
-
 export const updateUsername = (newUsername: string) => {
   console.log(`updateusername called with value ${newUsername}`);
   return {
@@ -26,25 +25,19 @@ export const attemptLogin = (username: string, password: string) => {
   console.log(JSON.stringify({ password: "pass", username: "zdscott" }));
   return (dispatch: Dispatch<IState>): any => {
     updateScreen("/home");
-    fetch("http://localhost:3000/user/login", {
+    fetch("http://localhost:3000/user/login/", {
       body: JSON.stringify({ username: "zdscott", password: "pass" }),
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": ".",
 
-      mode: "no-cors"
+        "Content-Type": "application/json"
+      },
+      method: "POST"
     })
-      .then(res => {
-        console.log(res[0]);
-        console.log(res[1]);
-        return res;
+      .then((resp: any) => {
+        resp.json();
       })
-      .then(res =>
-        dispatch({
-          payload: {
-            newScreenUrl: "/home"
-          },
-          type: loginTypes.ATTEMPT_LOGIN
-        })
-      );
+      .then((res: any) => console.log(res));
   };
 };

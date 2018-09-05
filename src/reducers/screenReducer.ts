@@ -3,6 +3,7 @@ import { screenTypes } from "../actions/screen/screen.types";
 import { loginTypes } from "../actions/login/login.types";
 
 const initialState: IScreenState = {
+  errorMessage: "",
   screenUrl: "/login"
 };
 
@@ -20,6 +21,11 @@ export const screenReducer = (
       return {
         ...state,
         screenUrl: action.payload.newScreenUrl
+      };
+    case screenTypes.UPDATE_ERROR:
+      return {
+        ...state,
+        errorMessage: action.payload.errorMes
       };
     default:
       return state;

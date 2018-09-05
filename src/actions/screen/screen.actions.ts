@@ -9,12 +9,3 @@ export const updateScreen = (url: string) => {
     type: screenTypes.UPDATE_SCREEN
   };
 };
-
-export const attemptLogin = (username: string, password: string) => {
-  return {
-    payload: {
-      newScreenUrl: "/home"
-    },
-    type: screenTypes.ATTEMPT_LOGIN
-  };
-};
