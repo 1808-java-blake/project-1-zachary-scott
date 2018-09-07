@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Login from "../login";
 import { updateScreen } from "../../../actions/screen/screen.actions";
 import Home from "../home";
+import RegisterReimbPage from "../../screens/register-reimb-page";
 
 interface IProps {
   screenUrl: string;
@@ -20,9 +21,9 @@ class ScreenSelector extends React.Component<IProps, any> {
         return <Login />;
       case "/home":
         return <Home />;
-      case "/submissionScreen":
-      // reuturn <Submit />;
-      case "approvalScreen":
+      case "/submission":
+        return <RegisterReimbPage />;
+      case "/approval":
       // return  <ApprovalScreen/>
 
       default:
