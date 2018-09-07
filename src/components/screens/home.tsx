@@ -5,7 +5,6 @@ import { User } from "../../models/user";
 import { Reimb } from "../../models/reimb";
 import { updateScreen } from "../../actions/screen/screen.actions";
 import * as React from "react";
-import { ReimbTableRows } from "../reimb-table-Rows";
 
 interface IProps {
   fetchReimbs: (user: User, list: string) => any;
@@ -30,6 +29,7 @@ class Home extends React.Component<IProps, any> {
     e.preventDefault;
     this.props.fetchReimbs(this.props.user, "user");
   }
+
   public render() {
     console.log(this.props.user);
     console.log(this.props.reimbs);
@@ -51,25 +51,16 @@ class Home extends React.Component<IProps, any> {
             </tr>
           </thead>
           <tbody>
-            <ReimbTableRows reimbs={this.props.reimbs} />
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
-            </tr>
+            {this.props.reimbs.map((reimb: Reimb) => (
+              <tr>
+                <th scope="row">{reimb.amount}</th>
+
+                <td>{reimb.submitted}</td>
+                <td>{reimb.resolved}</td>
+                <td>{reimb.statusId}</td>
+                <td>{reimb.typeId}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
