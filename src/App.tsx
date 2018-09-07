@@ -15,6 +15,7 @@ export default class App extends React.Component {
         <div>
           <h1> </h1>
           <ScreenSelector />
+          <p id="errorMessage">{store.getState().screen.errorMessage}</p>
         </div>
       </Provider>
     );

@@ -5,6 +5,7 @@ import { User } from "../../models/user";
 import { Reimb } from "../../models/reimb";
 import { updateScreen } from "../../actions/screen/screen.actions";
 import * as React from "react";
+import { ReimbTableRows } from "../reimb-table-Rows";
 
 interface IProps {
   fetchReimbs: (user: User, list: string) => any;
@@ -16,7 +17,7 @@ interface IProps {
 class Home extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props);
-    this.fetchReimbs = this.fetchReimbs.bind(this);
+    this.getReimbs = this.getReimbs.bind(this);
     this.submitScreen = this.submitScreen.bind(this);
   }
 
@@ -25,27 +26,52 @@ class Home extends React.Component<IProps, any> {
     this.props.updateScreen("/submission");
   }
 
-  public fetchReimbs(e: any) {
+  public getReimbs(e: any) {
     e.preventDefault;
     this.props.fetchReimbs(this.props.user, "user");
   }
   public render() {
     console.log(this.props.user);
     console.log(this.props.reimbs);
-    if (this.props.reimbs[0]) {
-      return (
-        <div>
-          <button onClick={this.fetchReimbs}>press for reimbs</button>
-          <button onClick={this.submitScreen}>submit a reimbursement</button>
-          <p>{this.props.reimbs[0].description}</p>
-        </div>
-      );
-    }
 
     return (
       <div>
-        <button onClick={this.fetchReimbs}>press for reimbs</button>
-        <p />
+        <button onClick={this.getReimbs}>press for reimbs</button>
+        <button onClick={this.submitScreen}>submit a reimbursement</button>
+        <p>{this.props.reimbs.length}</p>
+
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">amount</th>
+              <th scope="col">submission time</th>
+              <th scope="col">resolution time</th>
+              <th scope="col">status</th>
+              <th scope="col">type</th>;
+            </tr>
+          </thead>
+          <tbody>
+            <ReimbTableRows reimbs={this.props.reimbs} />
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Larry</td>
+              <td>the Bird</td>
+              <td>@twitter</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     );
   }

@@ -37,3 +37,6 @@
   padding-right: 30%;
   padding-top: 15%;
 }
+#errorMessage {
+  color: red;
+}

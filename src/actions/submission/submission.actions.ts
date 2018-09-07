@@ -1,4 +1,5 @@
 import { submissionTypes } from "./submission.types";
+import { updateScreen } from "../screen/screen.actions";
 
 export const updateSubmission = (
   newAmount: number,
@@ -13,4 +14,14 @@ export const updateSubmission = (
     },
     type: submissionTypes.UPDATE_SUBMISSION
   };
+};
+
+export const submitReimbursement = (
+  amount: number,
+  description: string,
+  type: string
+) => (dispatch: any) => {
+  if (true) {
+    dispatch(updateScreen(`/home`));
+  }
 };
