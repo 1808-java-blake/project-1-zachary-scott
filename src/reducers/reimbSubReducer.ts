@@ -4,7 +4,7 @@ import { submissionTypes } from "../actions/submission/submission.types";
 const initialState: ISubmitState = {
   amount: 0,
   description: "",
-  type: ""
+  type: 0
 };
 export const reimbSubReducer = (
   state: ISubmitState = initialState,
@@ -16,7 +16,7 @@ export const reimbSubReducer = (
         ...state,
         amount: action.payload.amount,
         description: action.payload.description,
-        types: action.payload.type
+        type: action.payload.type
       };
     default:
       return state;

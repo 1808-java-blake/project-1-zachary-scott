@@ -3,20 +3,23 @@ import { connect } from "react-redux";
 import { fetchReimbs } from "../../actions/fetch/fetch.actions";
 import { updateSubmission } from "../../actions/submission/submission.actions";
 import * as React from "react";
-import { submitReimbursement } from "../../actions/submission/submission.actions";
+import { submitReimb } from "../../actions/fetch/fetch.actions";
+import { User } from "../../models/user";
 /**
  * This screen allows users to submit new reimbursements
  */
 interface IProps {
+  user: User;
   amount: number;
   description: string;
-  type: string;
-  submitReimbursement: (
+  type: number;
+  submitReimb: (
     amount: number,
     description: string,
-    type: string
+    author: number,
+    type: number
   ) => any;
-  updateSubmission: (amount: number, description: string, type: string) => any;
+  updateSubmission: (amount: number, description: string, type: number) => any;
 }
 
 class RegisterReimbPage extends React.Component<IProps, any> {
@@ -25,7 +28,10 @@ class RegisterReimbPage extends React.Component<IProps, any> {
     this.submitReimbursement = this.submitReimbursement.bind(this);
     this.changeAmount = this.changeAmount.bind(this);
     this.changeDescription = this.changeDescription.bind(this);
-    this.changeType = this.changeType.bind(this);
+    this.changeType1 = this.changeType1.bind(this);
+    this.changeType2 = this.changeType2.bind(this);
+    this.changeType3 = this.changeType3.bind(this);
+    this.changeType4 = this.changeType4.bind(this);
   }
 
   // Instead of making 3 update submission actions, I made three local function
@@ -33,7 +39,7 @@ class RegisterReimbPage extends React.Component<IProps, any> {
   public changeAmount = (e: any) => {
     e.preventDefault();
     this.props.updateSubmission(
-      e.target.value,
+      +e.target.value,
       this.props.description,
       this.props.type
     );
@@ -48,25 +54,51 @@ class RegisterReimbPage extends React.Component<IProps, any> {
     );
   };
 
-  public changeType = (e: any) => {
+  public changeType1 = (e: any) => {
     e.preventDefault();
-    this.props.updateSubmission(
-      this.props.amount,
-      this.props.description,
-      e.target.value
-    );
+    this.props.updateSubmission(this.props.amount, this.props.description, 1);
+  };
+
+  public changeType2 = (e: any) => {
+    e.preventDefault();
+    this.props.updateSubmission(this.props.amount, this.props.description, 2);
+  };
+
+  public changeType3 = (e: any) => {
+    e.preventDefault();
+    this.props.updateSubmission(this.props.amount, this.props.description, 3);
+  };
+
+  public changeType4 = (e: any) => {
+    e.preventDefault();
+    this.props.updateSubmission(this.props.amount, this.props.description, 4);
   };
 
   // submits the reimb
   public submitReimbursement(e: any) {
     e.preventDefault();
-    this.props.submitReimbursement(
+    this.props.submitReimb(
       this.props.amount,
+
       this.props.description,
+      this.props.user.id,
       this.props.type
     );
   }
   public render() {
+    let typeText;
+    switch (this.props.type) {
+      case 0:
+        typeText = "select";
+      case 1:
+        typeText = "lodging";
+      case 2:
+        typeText = "travel";
+      case 3:
+        typeText = "food";
+      case 4:
+        typeText = "other";
+    }
     return (
       <div>
         <h3>Enter reimbursement submission </h3>
@@ -98,27 +130,43 @@ class RegisterReimbPage extends React.Component<IProps, any> {
             aria-haspopup="true"
             aria-expanded="false"
           >
-            Type
+            Type: {typeText}
           </button>
           <div className="dropdown-menu">
-            <button className="dropdown-item" type="button">
+            <button
+              className="dropdown-item"
+              type="button"
+              onClick={this.changeType1}
+            >
               lodging
             </button>
-            <button className="dropdown-item" type="button">
+            <button
+              className="dropdown-item"
+              type="button"
+              onClick={this.changeType2}
+            >
               travel
             </button>
 
-            <button className="dropdown-item" type="button">
+            <button
+              className="dropdown-item"
+              type="button"
+              onClick={this.changeType3}
+            >
               food
             </button>
-            <button className="dropdown-item" type="button">
+            <button
+              className="dropdown-item"
+              type="button"
+              onClick={this.changeType4}
+            >
               other
             </button>
           </div>
         </div>
         <form onSubmit={this.submitReimbursement}>
           <button type="submit" className="btn btn-primary">
-            Submit
+            Submit reimbursement
           </button>
         </form>
       </div>
@@ -127,11 +175,17 @@ class RegisterReimbPage extends React.Component<IProps, any> {
 }
 
 const mapStateToProps = (state: IState) => {
-  return { reimbs: state.userReimb.reimbList, user: state.userReimb.user };
+  return {
+    amount: state.submission.amount,
+    description: state.submission.description,
+    reimbs: state.userReimb.reimbList,
+    type: state.submission.type,
+    user: state.userReimb.user
+  };
 };
 const mapDispatchToProps = {
   fetchReimbs,
-  submitReimbursement,
+  submitReimb,
   updateSubmission
 };
 export default connect(

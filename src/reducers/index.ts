@@ -22,7 +22,7 @@ export interface ILoginState {
 export interface ISubmitState {
   amount: number;
   description: string;
-  type: string;
+  type: number;
 }
 
 export interface IState {

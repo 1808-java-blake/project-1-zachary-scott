@@ -4,8 +4,10 @@ import { updateScreen } from "../screen/screen.actions";
 export const updateSubmission = (
   newAmount: number,
   newDescription: string,
-  newType: string
+  newType: number
 ) => {
+  console.log("updating submission");
+  console.log(newType);
   return {
     payload: {
       amount: newAmount,
@@ -19,7 +21,7 @@ export const updateSubmission = (
 export const submitReimbursement = (
   amount: number,
   description: string,
-  type: string
+  type: number
 ) => (dispatch: any) => {
   if (true) {
     dispatch(updateScreen(`/home`));

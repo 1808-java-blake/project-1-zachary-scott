@@ -200,3 +200,71 @@ export const submitStatusChange = (user: User, reimbs: Reimb[]) => (
     type: screenTypes.UPDATE_ERROR
   });
 };
+
+export const submitReimb = (
+  subAmount: number,
+  subDescription: string,
+  subAuthor: number,
+  subTypeId: number
+) => (dispatch: any) => {
+  console.log("submitting reimb");
+  console.log(
+    JSON.stringify({
+      amount: subAmount,
+      author: subAuthor,
+      description: subDescription,
+      typeId: subTypeId
+    })
+  );
+  if (subTypeId === 0) {
+    dispatch({
+      payload: { errorMes: "You must select a type" },
+      type: screenTypes.UPDATE_ERROR
+    });
+    return;
+  }
+  try {
+    fetch(`http://localhost:3000/reimb/`, {
+      body: JSON.stringify({
+        amount: +subAmount,
+        author: subAuthor,
+        description: subDescription,
+        typeId: subTypeId
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "Post"
+    }).then(resp => {
+      if (resp.status === 201) {
+        alert("created reimb");
+      } else {
+        dispatch({
+          payload: { errorMes: "You must select a type" },
+          type: screenTypes.UPDATE_ERROR
+        });
+      }
+    });
+    //   try {
+    //     return resp.json();
+    //   } catch (err) {
+    //     dispatch({
+    //       payload: { errorMes: "You must select a type" },
+    //       type: screenTypes.UPDATE_ERROR
+    //     });
+    //     return 400;
+    //   }
+    // })
+    // .then(resp => {
+    //   if (resp === 201) {
+    //     alert("Successfully submitted new reimbursement");
+    //   } else if (resp === 403) {
+    //     alert("Forbidden");
+    //   } else {
+    //     alert("failed to created");
+    //   }
+    // });
+  } catch (err) {
+    alert("failed to submit reimbursement");
+  }
+};
