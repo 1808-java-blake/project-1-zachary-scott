@@ -10,9 +10,9 @@ const initialState: IUserReimbState = {
     1,
     "zdscott",
     "pass",
-    "Zachary",
+    "Zachary not",
     "Scott",
-    "Zdscott@evilcorp.net",
+    "Zdscott@goodcorp.net",
     1
   )
 };
@@ -31,7 +31,7 @@ export const userReimbReducer = (
       };
     case fetchTypes.GET_REIMB:
       console.log("logging reimbs");
-      console.log(action.payload.user);
+      console.log(action.payload.reimbs);
       return {
         ...state,
         reimbList: action.payload.reimbs

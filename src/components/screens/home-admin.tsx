@@ -11,24 +11,25 @@ import ReimbFilter from "../reimb-filter";
 interface IProps {
   fetchReimbs: (user: User, list: string) => any;
   user: User;
+  dispReimbs: Reimb[];
   reimbs: Reimb[];
   updateScreen: (url: string) => any;
-  submitStatusChange: (reimbs: Reimb[]) => any;
+  submitStatusChange: (user: User, reimbs: Reimb[]) => any;
 }
 
 class HomeAdmin extends React.Component<IProps, any> {
   constructor(props: any) {
     super(props);
     this.getReimbs = this.getReimbs.bind(this);
-    this.submitScreen = this.submitScreen.bind(this);
+    this.submissionScreen = this.submissionScreen.bind(this);
     this.submitChanges = this.submitChanges.bind(this);
   }
 
   public submitChanges(e: any) {
     e.preventDefault();
-    this.props.submitStatusChange(this.props.reimbs);
+    this.props.submitStatusChange(this.props.user, this.props.reimbs);
   }
-  public submitScreen(e: any) {
+  public submissionScreen(e: any) {
     e.preventDefault();
     this.props.updateScreen("/submission");
   }
@@ -45,7 +46,7 @@ class HomeAdmin extends React.Component<IProps, any> {
     return (
       <div>
         <button onClick={this.getReimbs}>press for reimbs</button>
-        <button onClick={this.submitScreen}>submit a reimbursement</button>
+        <button onClick={this.submissionScreen}>submit a reimbursement</button>
         <p>{this.props.reimbs.length}</p>
 
         <table className="table table-striped">
@@ -59,7 +60,7 @@ class HomeAdmin extends React.Component<IProps, any> {
             </tr>
           </thead>
           <tbody>
-            {this.props.reimbs.map((reimb: Reimb) => (
+            {this.props.dispReimbs.map((reimb: Reimb) => (
               <tr key={reimb.id}>
                 <th scope="row">{reimb.amount}</th>
 
@@ -85,7 +86,11 @@ class HomeAdmin extends React.Component<IProps, any> {
 }
 
 const mapStateToProps = (state: IState) => {
-  return { reimbs: state.userReimb.currReimbs, user: state.userReimb.user };
+  return {
+    dispReimbs: state.userReimb.currReimbs,
+    reimbs: state.userReimb.reimbList,
+    user: state.userReimb.user
+  };
 };
 const mapDispatchToProps = { fetchReimbs, submitStatusChange, updateScreen };
 export default connect(

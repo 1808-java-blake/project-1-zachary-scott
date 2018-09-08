@@ -2,8 +2,6 @@ import { fetchTypes } from "./fetch.types";
 import { User } from "../../models/user";
 import { screenTypes } from "../screen/screen.types";
 import { Reimb } from "../../models/reimb";
-import { updateError } from "../screen/screen.actions";
-import { homeTypes } from "../home/home.types";
 
 const respUser: User = new User(
   1,
@@ -15,30 +13,30 @@ const respUser: User = new User(
   1
 );
 
-const reqReimbs: Reimb[] = [
-  new Reimb(
-    1,
-    100,
-    "a long time ago",
-    "soon hopefully",
-    "testing reimb",
-    1,
-    1,
-    1,
-    1
-  ),
-  new Reimb(
-    2,
-    100,
-    "a long time ago",
-    "soon hopefully",
-    "testing reimb",
-    2,
-    1,
-    1,
-    1
-  )
-];
+// const reqReimbs: Reimb[] = [
+//   new Reimb(
+//     1,
+//     100,
+//     "a long time ago",
+//     "soon hopefully",
+//     "testing reimb",
+//     1,
+//     1,
+//     1,
+//     1
+//   ),
+//   new Reimb(
+//     2,
+//     100,
+//     "a long time ago",
+//     "soon hopefully",
+//     "testing reimb",
+//     2,
+//     1,
+//     1,
+//     1
+//   )
+// ];
 
 export const fetchLogin = (loginUsername: string, loginPassword: string) => (
   dispatch: any
@@ -107,73 +105,98 @@ export const fetchLogin = (loginUsername: string, loginPassword: string) => (
 };
 
 export const fetchReimbs = (user: User, list: string) => (dispatch: any) => {
-  const resp = {
-    reimbs: reqReimbs,
-    status: 201
-  };
-  if (resp.status === 201) {
-    console.log(`grabbed the reimbs: ${resp.reimbs}`);
-    console.log(resp.reimbs);
-    // dispatch({ type: "nothing" });
-    dispatch({
-      payload: {
-        reimbs: resp.reimbs
-      },
-      type: fetchTypes.GET_REIMB
-    });
-    dispatch({
-      payload: {
-        currReimbs: resp.reimbs
-      },
-      type: homeTypes.GET_CURR_REIMB
-    });
-  } else if (resp.status === 403) {
-    return {};
-    // dispatch({
-    //   payload: {
-    //     errorMes: "that is forbidden for non-admins. Get out of inspect element"
-    //   },
-    //   type: screenTypes.UPDATE_ERROR
-    // });
+  let fetchString: string;
+
+  if (user.roleID === 1) {
+    fetchString = "http://localhost:3000/reimb/all";
+  } else {
+    fetchString = `http://localhost:3000/reimb/${user.id}`;
   }
-  return {};
-  //   dispatch({
-  //     payload: {
-  //       errorMes: "Something went Wrong, our bad."
-  //     },
-  //     type: screenTypes.UPDATE_ERROR
-  //   });
-  //   return {};
+  fetch(fetchString, {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    method: "GET"
+  })
+    .then((resp: any) => {
+      try {
+        if (resp === null) {
+          return;
+        } else if (resp.status === 404) {
+          console.log("user not found");
+          dispatch({
+            payload: {
+              errorMes: "Server couldn't find aany reimbursements"
+            },
+            type: screenTypes.UPDATE_ERROR
+          });
+
+          return;
+        } else {
+          return resp.json();
+        }
+      } catch (err) {
+        dispatch({
+          payload: { errorMes: "Something Went Wrong" },
+          type: screenTypes.UPDATE_ERROR
+        });
+      }
+    })
+    .then(resp => {
+      const newReimbs: Reimb[] = [];
+      resp.forEach((reimb: Reimb) => {
+        newReimbs.push(
+          new Reimb(
+            reimb.id,
+            reimb.amount,
+            reimb.submitted,
+            reimb.resolved && reimb.resolved,
+            reimb.description,
+            reimb.author,
+            reimb.resolver && reimb.resolver,
+            reimb.statusId,
+            reimb.typeId
+          )
+        );
+      });
+      console.log(resp);
+      console.log(newReimbs);
+      dispatch({
+        payload: {
+          reimbs: newReimbs
+        },
+        type: fetchTypes.GET_REIMB
+      });
+    });
 };
 
-export const submitChanges = (reimbs: Reimb[]) => (dispatch: any) => {
-  const resp = { status: 201 };
+export const submitStatusChange = (user: User, reimbs: Reimb[]) => (
+  dispatch: any
+) => {
+  console.log("submitting changes");
+  let failCount: number = 0;
   reimbs.forEach(reimb => {
     try {
-      console.log("changes logged");
+      fetch(`http://localhost:3000/reimb/${user.id}`, {
+        body: JSON.stringify({
+          amount: reimb.amount,
+          author: reimb.author,
+          description: reimb.description,
+          id: reimb.id,
+          statusId: reimb.statusId,
+          typeId: reimb.typeId
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "PATCH"
+      });
     } catch (err) {
-      dispatch(updateError("We experienced a server error"));
-    }
-    if (resp.status === 201) {
-      alert("Success: Reimbursements updated");
-    } else if (resp.status === 403) {
-      alert("Failure: That is FORBIDEEN");
-      dispatch(updateError("Don't try to spoof our system."));
-    } else {
-      alert("Failure: Something went wrong on our end");
-      dispatch(updateError("We experienced a server error, sorry about that."));
+      failCount++;
     }
   });
-};
-
-export const submitStatusChange = (newReimbs: Reimb[]) => {
-  const resp = { status: 201 };
-
-  if (resp.status === 201) {
-    alert("Successfully updated Statuses");
-  }
-  return {
-    payload: { errorMes: "" },
+  dispatch({
+    payload: { errorMess: `${failCount} entries failed to update` },
     type: screenTypes.UPDATE_ERROR
-  };
+  });
 };
