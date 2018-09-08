@@ -12,7 +12,7 @@ export interface IScreenState {
 }
 export interface IUserReimbState {
   user: User;
-  currReimb: Reimb;
+  currReimbs: Reimb[];
   reimbList: Reimb[];
 }
 export interface ILoginState {

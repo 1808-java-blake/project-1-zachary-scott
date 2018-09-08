@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  margin: 10%;
 }
 
 .App-logo {
@@ -36,6 +37,9 @@
   padding-left: 30%;
   padding-right: 30%;
   padding-top: 15%;
+}
+.Home {
+  padding: 10%;
 }
 #errorMessage {
   color: red;

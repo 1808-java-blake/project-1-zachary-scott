@@ -1,4 +1,4 @@
-import { ISubmitState } from "./index";
+import { ISubmitState } from ".";
 import { submissionTypes } from "../actions/submission/submission.types";
 
 const initialState: ISubmitState = {

@@ -1,10 +1,10 @@
 import * as React from "react";
-import { IState } from "../../../reducers/index";
+import { IState } from "../../../reducers";
 import { connect } from "react-redux";
 import Login from "../login";
 import { updateScreen } from "../../../actions/screen/screen.actions";
 import Home from "../home";
-import RegisterReimbPage from "../../screens/register-reimb-page";
+import RegisterReimbPage from "../register-reimb-page";
 
 interface IProps {
   screenUrl: string;

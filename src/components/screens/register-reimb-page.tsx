@@ -102,17 +102,18 @@ class RegisterReimbPage extends React.Component<IProps, any> {
           </button>
           <div className="dropdown-menu">
             <button className="dropdown-item" type="button">
-              Action
+              lodging
             </button>
             <button className="dropdown-item" type="button">
-              Another action
+              travel
             </button>
-            if (tru)
-            {
-              <button className="dropdown-item" type="button">
-                Something else here
-              </button>
-            }
+
+            <button className="dropdown-item" type="button">
+              food
+            </button>
+            <button className="dropdown-item" type="button">
+              other
+            </button>
           </div>
         </div>
         <form onSubmit={this.submitReimbursement}>

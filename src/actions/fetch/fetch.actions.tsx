@@ -2,6 +2,9 @@ import { fetchTypes } from "./fetch.types";
 import { User } from "../../models/user";
 import { screenTypes } from "../screen/screen.types";
 import { Reimb } from "../../models/reimb";
+import { updateError } from "../screen/screen.actions";
+import { homeTypes } from "../home/home.types";
+
 const respUser: User = new User(
   1,
   "zdscott",
@@ -58,7 +61,7 @@ export const fetchLogin = (username: string, password: string) => (
   }
 };
 
-export const fetchReimbs = (user: User, list: string) => {
+export const fetchReimbs = (user: User, list: string) => (dispatch: any) => {
   const resp = {
     reimbs: reqReimbs,
     status: 201
@@ -67,12 +70,18 @@ export const fetchReimbs = (user: User, list: string) => {
     console.log(`grabbed the reimbs: ${resp.reimbs}`);
     console.log(resp.reimbs);
     // dispatch({ type: "nothing" });
-    return {
+    dispatch({
       payload: {
         reimbs: resp.reimbs
       },
       type: fetchTypes.GET_REIMB
-    };
+    });
+    dispatch({
+      payload: {
+        currReimbs: resp.reimbs
+      },
+      type: homeTypes.GET_CURR_REIMB
+    });
   } else if (resp.status === 403) {
     return {};
     // dispatch({
@@ -90,4 +99,36 @@ export const fetchReimbs = (user: User, list: string) => {
   //     type: screenTypes.UPDATE_ERROR
   //   });
   //   return {};
+};
+
+export const submitChanges = (reimbs: Reimb[]) => (dispatch: any) => {
+  const resp = { status: 201 };
+  reimbs.forEach(reimb => {
+    try {
+      console.log("changes logged");
+    } catch (err) {
+      dispatch(updateError("We experienced a server error"));
+    }
+    if (resp.status === 201) {
+      alert("Success: Reimbursements updated");
+    } else if (resp.status === 403) {
+      alert("Failure: That is FORBIDEEN");
+      dispatch(updateError("Don't try to spoof our system."));
+    } else {
+      alert("Failure: Something went wrong on our end");
+      dispatch(updateError("We experienced a server error, sorry about that."));
+    }
+  });
+};
+
+export const submitStatusChange = (newReimbs: Reimb[]) => {
+  const resp = { status: 201 };
+
+  if (resp.status === 201) {
+    alert("Successfully updated Statuses");
+  }
+  return {
+    payload: { errorMes: "" },
+    type: screenTypes.UPDATE_ERROR
+  };
 };

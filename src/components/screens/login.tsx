@@ -5,7 +5,7 @@ import {
   updatePassword
 } from "../../actions/login/login.actions";
 import { connect } from "react-redux";
-import { IState } from "../../reducers/index";
+import { IState } from "../../reducers";
 
 interface IProps {
   fetchLogin: (username: string, password: string) => any;

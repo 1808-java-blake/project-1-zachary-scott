@@ -1,6 +1,6 @@
 import { loginTypes } from "./login.types";
 import { updateScreen } from "../screen/screen.actions";
-import { IState } from "../../reducers/index";
+import { IState } from "../../reducers";
 import { Dispatch } from "redux";
 export const updateUsername = (newUsername: string) => {
   console.log(`updateusername called with value ${newUsername}`);

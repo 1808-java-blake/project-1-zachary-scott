@@ -1,20 +1,10 @@
-import { IUserReimbState } from "./index";
+import { IUserReimbState } from ".";
 import { fetchTypes } from "../actions/fetch/fetch.types";
 import { User } from "../models/user";
-import { Reimb } from "../models/reimb";
 
+import { homeTypes } from "../actions/home/home.types";
 const initialState: IUserReimbState = {
-  currReimb: new Reimb(
-    1,
-    100,
-    "a long time ago",
-    "soon hopefully",
-    "testing reimb",
-    1,
-    1,
-    1,
-    1
-  ),
+  currReimbs: [],
   reimbList: [],
   user: new User(
     1,
@@ -42,6 +32,16 @@ export const userReimbReducer = (
     case fetchTypes.GET_REIMB:
       console.log("logging reimbs");
       console.log(action.payload.user);
+      return {
+        ...state,
+        reimbList: action.payload.reimbs
+      };
+    case homeTypes.GET_CURR_REIMB:
+      return {
+        ...state,
+        currReimbs: action.payload.currReimbs
+      };
+    case homeTypes.STATUS_CHANGE:
       return {
         ...state,
         reimbList: action.payload.reimbs
