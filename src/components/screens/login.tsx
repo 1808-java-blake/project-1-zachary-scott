@@ -45,9 +45,8 @@ class Login extends React.Component<IProps, any> {
         <div className="form-group">
           <label>Username</label>
           <input
-            type="email"
+            type="username"
             className="form-control"
-            id="exampleInputEmail1"
             aria-describedby="emailHelp"
             placeholder="Enter username"
             onChange={this.changeUsername}
@@ -62,7 +61,6 @@ class Login extends React.Component<IProps, any> {
           <input
             type="password"
             className="form-control"
-            id="exampleInputPassword1"
             placeholder="Enter password"
             onChange={this.changePassword}
             value={this.props.password}

@@ -40,25 +40,70 @@ const reqReimbs: Reimb[] = [
   )
 ];
 
-export const fetchLogin = (username: string, password: string) => (
+export const fetchLogin = (loginUsername: string, loginPassword: string) => (
   dispatch: any
 ) => {
-  if (true) {
-    dispatch({
-      payload: {
-        newScreenUrl: "/home"
+  const response: any = () =>
+    fetch("http://localhost:3000/user/login/", {
+      body: JSON.stringify({
+        password: loginPassword,
+        username: loginUsername
+      }),
+      headers: {
+        "Content-Type": "application/json"
       },
-      type: screenTypes.UPDATE_SCREEN
+      method: "POST"
     });
-    console.log(`got the login: ${respUser}`);
-    console.log(respUser);
-    dispatch({
-      payload: {
-        user: respUser
-      },
-      type: fetchTypes.LOGIN
+
+  response()
+    .then((resp: any) => {
+      try {
+        if (resp === null) {
+          return;
+        } else if (resp.status === 404) {
+          console.log("user not found");
+          dispatch({
+            payload: {
+              errorMes: "Your username or password are incorrect."
+            },
+            type: screenTypes.UPDATE_ERROR
+          });
+
+          return;
+        } else {
+          return resp.json();
+        }
+      } catch (err) {
+        dispatch({
+          payload: { errorMes: "Something Went Wrong" },
+          type: screenTypes.UPDATE_ERROR
+        });
+      }
+    })
+    .then((resp: any) => {
+      if (resp) {
+        dispatch({
+          payload: {
+            user: resp
+          },
+          type: fetchTypes.LOGIN
+        });
+        dispatch({
+          payload: {
+            newScreenUrl: "/home"
+          },
+          type: screenTypes.UPDATE_SCREEN
+        });
+        console.log(`got the login: ${respUser}`);
+        console.log(respUser);
+        dispatch({
+          payload: {
+            user: respUser
+          },
+          type: fetchTypes.LOGIN
+        });
+      }
     });
-  }
 };
 
 export const fetchReimbs = (user: User, list: string) => (dispatch: any) => {

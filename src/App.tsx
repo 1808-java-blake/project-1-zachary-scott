@@ -6,6 +6,7 @@ import "./App.css";
 import ScreenSelector from "./components/screens/selector/screen-selector";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import ErrorMessage from "./components/error-message";
 
 export default class App extends React.Component {
   public render() {
@@ -15,7 +16,7 @@ export default class App extends React.Component {
         <div>
           <h1> </h1>
           <ScreenSelector />
-          <p id="errorMessage">{store.getState().screen.errorMessage}</p>
+          <ErrorMessage />
         </div>
       </Provider>
     );

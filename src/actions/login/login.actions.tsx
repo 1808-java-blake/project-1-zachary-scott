@@ -17,7 +17,7 @@ export const updatePassword = (newPassword: string) => {
     payload: {
       password: newPassword
     },
-    type: loginTypes.CHANGE_USERNAME
+    type: loginTypes.CHANGE_PASSWORD
   };
 };
 

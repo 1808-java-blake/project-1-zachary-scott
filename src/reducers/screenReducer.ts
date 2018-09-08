@@ -23,6 +23,7 @@ export const screenReducer = (
         screenUrl: action.payload.newScreenUrl
       };
     case screenTypes.UPDATE_ERROR:
+      console.log("telling the user the bad news");
       return {
         ...state,
         errorMessage: action.payload.errorMes
