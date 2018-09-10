@@ -2,41 +2,8 @@ import { fetchTypes } from "./fetch.types";
 import { User } from "../../models/user";
 import { screenTypes } from "../screen/screen.types";
 import { Reimb } from "../../models/reimb";
-
-const respUser: User = new User(
-  1,
-  "zdscott",
-  "pass",
-  "Zachary",
-  "Scott",
-  "Zdscott@evilcorp.net",
-  1
-);
-
-// const reqReimbs: Reimb[] = [
-//   new Reimb(
-//     1,
-//     100,
-//     "a long time ago",
-//     "soon hopefully",
-//     "testing reimb",
-//     1,
-//     1,
-//     1,
-//     1
-//   ),
-//   new Reimb(
-//     2,
-//     100,
-//     "a long time ago",
-//     "soon hopefully",
-//     "testing reimb",
-//     2,
-//     1,
-//     1,
-//     1
-//   )
-// ];
+import { updateScreen } from "../screen/screen.actions";
+import { updateSubmission } from "../submission/submission.actions";
 
 export const fetchLogin = (loginUsername: string, loginPassword: string) => (
   dispatch: any
@@ -66,7 +33,6 @@ export const fetchLogin = (loginUsername: string, loginPassword: string) => (
             },
             type: screenTypes.UPDATE_ERROR
           });
-
           return;
         } else {
           return resp.json();
@@ -80,25 +46,27 @@ export const fetchLogin = (loginUsername: string, loginPassword: string) => (
     })
     .then((resp: any) => {
       if (resp) {
+        const newUser = new User(
+          resp.id,
+          resp.username,
+          resp.password,
+          resp.firstName,
+          resp.lastName,
+          resp.email,
+          resp.roleID
+        );
         dispatch({
           payload: {
-            user: resp
+            user: newUser
           },
           type: fetchTypes.LOGIN
         });
+
         dispatch({
           payload: {
             newScreenUrl: "/home"
           },
           type: screenTypes.UPDATE_SCREEN
-        });
-        console.log(`got the login: ${respUser}`);
-        console.log(respUser);
-        dispatch({
-          payload: {
-            user: respUser
-          },
-          type: fetchTypes.LOGIN
         });
       }
     });
@@ -106,17 +74,21 @@ export const fetchLogin = (loginUsername: string, loginPassword: string) => (
 
 export const fetchReimbs = (user: User, list: string) => (dispatch: any) => {
   let fetchString: string;
-
-  if (user.roleID === 1) {
+  console.log(JSON.stringify(user));
+  if (user.roleId === 1) {
+    console.log("fetching all reimbs");
     fetchString = "http://localhost:3000/reimb/all";
   } else {
+    console.log("fetching user reimbs");
     fetchString = `http://localhost:3000/reimb/${user.id}`;
   }
   fetch(fetchString, {
+    body: JSON.stringify(user),
     headers: {
       "Content-Type": "application/json"
     },
-    method: "GET"
+
+    method: "POST"
   })
     .then((resp: any) => {
       try {
@@ -132,6 +104,14 @@ export const fetchReimbs = (user: User, list: string) => (dispatch: any) => {
           });
 
           return;
+        } else if (resp.status === 403) {
+          dispatch({
+            payload: {
+              errorMes: "YOu don't have access to that. "
+            },
+            type: screenTypes.UPDATE_ERROR
+          });
+          return;
         } else {
           return resp.json();
         }
@@ -144,35 +124,45 @@ export const fetchReimbs = (user: User, list: string) => (dispatch: any) => {
     })
     .then(resp => {
       const newReimbs: Reimb[] = [];
-      resp.forEach((reimb: Reimb) => {
-        newReimbs.push(
-          new Reimb(
-            reimb.id,
-            reimb.amount,
-            reimb.submitted,
-            reimb.resolved && reimb.resolved,
-            reimb.description,
-            reimb.author,
-            reimb.resolver && reimb.resolver,
-            reimb.statusId,
-            reimb.typeId
-          )
-        );
-      });
-      console.log(resp);
-      console.log(newReimbs);
-      dispatch({
-        payload: {
-          reimbs: newReimbs
-        },
-        type: fetchTypes.GET_REIMB
-      });
+      let resolutionTime: string = "N/A";
+      if (resp) {
+        resp.forEach((reimb: Reimb) => {
+          resolutionTime = "N/A";
+          if (reimb.resolved) {
+            resolutionTime = reimb.resolved;
+          }
+          newReimbs.push(
+            new Reimb(
+              reimb.id,
+              reimb.amount,
+              reimb.submitted.substring(0, reimb.submitted.length - 10),
+              resolutionTime.substring(0, resolutionTime.length - 10),
+              reimb.description,
+              reimb.author,
+              reimb.resolver,
+              reimb.statusId,
+              reimb.typeId
+            )
+          );
+        });
+        console.log(resp);
+        console.log(newReimbs);
+        dispatch({
+          payload: {
+            currReimbs: newReimbs,
+            reimbs: newReimbs
+          },
+          type: fetchTypes.GET_REIMB
+        });
+      }
     });
 };
 
-export const submitStatusChange = (user: User, reimbs: Reimb[]) => (
-  dispatch: any
-) => {
+export const submitStatusChange = (
+  user: User,
+  reimbs: Reimb[],
+  compareReimbs: Reimb[]
+) => (dispatch: any) => {
   console.log("submitting changes");
   let failCount: number = 0;
   reimbs.forEach(reimb => {
@@ -238,13 +228,19 @@ export const submitReimb = (
     }).then(resp => {
       if (resp.status === 201) {
         alert("created reimb");
+        dispatch(updateScreen("/home"));
+        dispatch(updateSubmission(0, "", 0));
       } else {
         dispatch({
-          payload: { errorMes: "You must select a type" },
+          payload: {
+            errorMes:
+              "There was an error in reimbursement submission. Check that your reimbursement is formatted correctly."
+          },
           type: screenTypes.UPDATE_ERROR
         });
       }
     });
+
     //   try {
     //     return resp.json();
     //   } catch (err) {

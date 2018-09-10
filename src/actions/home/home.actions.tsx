@@ -3,17 +3,25 @@ import { Reimb } from "../../models/reimb";
 
 export const getCurrReimbs = (reimbs: Reimb[], status: number) => {
   console.log("getting current reimbs");
-  const filterReimbs = reimbs.filter(reimb => {
-    if (reimb.statusId === status) {
-      return true;
-    } else {
-      return false;
-    }
-  });
+  let filterReimbs;
+  if (status !== 0) {
+    filterReimbs = reimbs.filter(reimb => {
+      if (reimb.statusId === status) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  } else {
+    filterReimbs = reimbs;
+  }
+
   console.log(filterReimbs);
+  console.log("filter value is", status);
   return {
     payload: {
-      currReimbs: filterReimbs
+      currReimbs: filterReimbs,
+      filter: status
     },
     type: homeTypes.GET_CURR_REIMB
   };
@@ -24,10 +32,7 @@ export const changeStatus = (
   id: number,
   status: number
 ) => {
-  console.log(`looking for id: ${id}`);
   newReimbs.forEach(reimb => {
-    console.log(`reimb.id and val are  ${reimb.id} ${reimb.statusId}`);
-    console.log(`hitting changeStatus with id: ${id}`);
     if (reimb.id === id) {
       console.log(reimb.id);
       reimb.statusId = status;
@@ -35,7 +40,7 @@ export const changeStatus = (
     }
   });
   return {
-    payload: { reimbs: newReimbs },
+    payload: { currReimbs: newReimbs },
     type: homeTypes.STATUS_CHANGE
   };
 };

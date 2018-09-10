@@ -14,6 +14,7 @@ export interface IUserReimbState {
   user: User;
   currReimbs: Reimb[];
   reimbList: Reimb[];
+  filter: number;
 }
 export interface ILoginState {
   password: string;

@@ -2,8 +2,8 @@ import { loginTypes } from "../actions/login/login.types";
 import { ILoginState } from ".";
 
 const initialState: ILoginState = {
-  password: "bob",
-  username: "bill"
+  password: "",
+  username: ""
 };
 
 export const loginReducer = (

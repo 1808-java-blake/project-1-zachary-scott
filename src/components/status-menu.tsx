@@ -7,7 +7,7 @@ interface IProps {
   changeStatus: (newReimbs: Reimb[], id: number, status: number) => any;
   idVal: number;
   reimbs: Reimb[];
-  currStatus: number;
+  currStatus: string;
   updateScreen: (url: string) => any;
 }
 
@@ -37,10 +37,10 @@ class StatusMenu extends React.Component<IProps, any> {
 
   public render() {
     return (
-      <div className="btn-group dropright">
+      <div className="btn-group btn-small dropright">
         <button
           type="button"
-          className="btn btn-secondary dropdown-toggle"
+          className="btn btn-primary dropdown-toggle"
           data-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"

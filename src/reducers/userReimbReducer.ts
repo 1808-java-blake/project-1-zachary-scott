@@ -5,11 +5,12 @@ import { User } from "../models/user";
 import { homeTypes } from "../actions/home/home.types";
 const initialState: IUserReimbState = {
   currReimbs: [],
+  filter: 0,
   reimbList: [],
   user: new User(
     1,
     "zdscott",
-    "pass",
+    "plplpl",
     "Zachary not",
     "Scott",
     "Zdscott@goodcorp.net",
@@ -34,17 +35,22 @@ export const userReimbReducer = (
       console.log(action.payload.reimbs);
       return {
         ...state,
+        currReimbs: action.payload.reimbs,
         reimbList: action.payload.reimbs
       };
     case homeTypes.GET_CURR_REIMB:
+      console.log(
+        `filter: ${state.filter} changed to ${action.payload.filter}`
+      );
       return {
         ...state,
-        currReimbs: action.payload.currReimbs
+        currReimbs: action.payload.currReimbs,
+        filter: action.payload.filter
       };
     case homeTypes.STATUS_CHANGE:
       return {
         ...state,
-        reimbList: action.payload.reimbs
+        currReimbs: action.payload.currReimbs
       };
     default:
       return state;

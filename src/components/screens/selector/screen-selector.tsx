@@ -22,7 +22,7 @@ class ScreenSelector extends React.Component<IProps, any> {
       case "/home":
         return <Home />;
       case "/submission":
-        return <RegisterReimbPage />;
+        return <RegisterReimbPage id="reimb-select" />;
       case "/approval":
       // return  <ApprovalScreen/>
 

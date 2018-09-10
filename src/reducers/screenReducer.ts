@@ -3,7 +3,7 @@ import { screenTypes } from "../actions/screen/screen.types";
 import { loginTypes } from "../actions/login/login.types";
 
 const initialState: IScreenState = {
-  errorMessage: "placeholder",
+  errorMessage: "",
   screenUrl: "/login"
 };
 

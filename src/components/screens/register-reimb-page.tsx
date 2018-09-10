@@ -5,6 +5,8 @@ import { updateSubmission } from "../../actions/submission/submission.actions";
 import * as React from "react";
 import { submitReimb } from "../../actions/fetch/fetch.actions";
 import { User } from "../../models/user";
+import "../../App.css";
+import { updateScreen } from "../../actions/screen/screen.actions";
 /**
  * This screen allows users to submit new reimbursements
  */
@@ -19,6 +21,7 @@ interface IProps {
     author: number,
     type: number
   ) => any;
+  updateScreen: (url: string) => any;
   updateSubmission: (amount: number, description: string, type: number) => any;
 }
 
@@ -32,6 +35,7 @@ class RegisterReimbPage extends React.Component<IProps, any> {
     this.changeType2 = this.changeType2.bind(this);
     this.changeType3 = this.changeType3.bind(this);
     this.changeType4 = this.changeType4.bind(this);
+    this.goHome = this.goHome.bind(this);
   }
 
   // Instead of making 3 update submission actions, I made three local function
@@ -44,6 +48,10 @@ class RegisterReimbPage extends React.Component<IProps, any> {
       this.props.type
     );
   };
+  public goHome(e: any) {
+    e.preventDefault();
+    this.props.updateScreen("/home");
+  }
 
   public changeDescription = (e: any) => {
     e.preventDefault();
@@ -90,18 +98,31 @@ class RegisterReimbPage extends React.Component<IProps, any> {
     switch (this.props.type) {
       case 0:
         typeText = "select";
+        break;
       case 1:
         typeText = "lodging";
+        break;
       case 2:
         typeText = "travel";
+        break;
       case 3:
         typeText = "food";
+        break;
       case 4:
         typeText = "other";
+        break;
     }
     return (
       <div>
-        <h3>Enter reimbursement submission </h3>
+        <button
+          id="home-button"
+          type="submit"
+          className="btn btn-primary"
+          onClick={this.goHome}
+        >
+          Go back to home
+        </button>
+        <h2>Reimbursement Submission </h2>
 
         <div className="form-group">
           <label>Amount:</label>
@@ -122,10 +143,10 @@ class RegisterReimbPage extends React.Component<IProps, any> {
           />
         </div>
 
-        <div className="btn-group dropright">
+        <div id="type-button" className="btn-group dropright">
           <button
             type="button"
-            className="btn btn-secondary dropdown-toggle"
+            className="btn btn-primary dropdown-toggle"
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
@@ -164,11 +185,16 @@ class RegisterReimbPage extends React.Component<IProps, any> {
             </button>
           </div>
         </div>
-        <form onSubmit={this.submitReimbursement}>
-          <button type="submit" className="btn btn-primary">
-            Submit reimbursement
-          </button>
-        </form>
+        <br />
+
+        <button
+          id="submit-button"
+          type="submit"
+          className="btn btn-primary"
+          onClick={this.submitReimbursement}
+        >
+          Submit reimbursement
+        </button>
       </div>
     );
   }
@@ -186,6 +212,7 @@ const mapStateToProps = (state: IState) => {
 const mapDispatchToProps = {
   fetchReimbs,
   submitReimb,
+  updateScreen,
   updateSubmission
 };
 export default connect(

@@ -1,11 +1,14 @@
 import * as React from "react";
 import { fetchLogin } from "../../actions/fetch/fetch.actions";
+import { fetchReimbs } from "../../actions/fetch/fetch.actions";
+
 import {
   updateUsername,
   updatePassword
 } from "../../actions/login/login.actions";
 import { connect } from "react-redux";
 import { IState } from "../../reducers";
+import "../../App.css";
 
 interface IProps {
   fetchLogin: (username: string, password: string) => any;
@@ -42,6 +45,12 @@ class Login extends React.Component<IProps, any> {
     console.log(this);
     return (
       <form className="Login" onSubmit={this.attemptLogin}>
+        <img
+          src="https://i.imgur.com/IQAbYjt.png"
+          alt="https://i.imgur.com/JE0XRiP.png"
+        />
+        <br />
+        <i>refreshingly simple compensation</i>
         <div className="form-group">
           <label>Username</label>
           <input
@@ -52,9 +61,7 @@ class Login extends React.Component<IProps, any> {
             onChange={this.changeUsername}
             value={this.props.username}
           />
-          <small id="emailHelp" className="form-text text-muted">
-            We'll ALWAYS share your email with anyone we feel like.
-          </small>
+          <small id="emailHelp" className="form-text text-muted" />
         </div>
         <div className="form-group">
           <label>Password</label>
@@ -66,14 +73,7 @@ class Login extends React.Component<IProps, any> {
             value={this.props.password}
           />
         </div>
-        <div className="form-check">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="exampleCheck1"
-          />
-          <label className="form-check-label">Check me out</label>
-        </div>
+
         <button type="submit" className="btn btn-primary">
           Submit
         </button>
@@ -89,6 +89,7 @@ const mapStateToProps = (state: IState) => {
 };
 const mapDispatchToProps = {
   fetchLogin,
+  fetchReimbs,
   updatePassword,
   updateUsername
 };

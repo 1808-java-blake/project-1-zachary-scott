@@ -4,12 +4,13 @@ import { fetchReimbs } from "../../actions/fetch/fetch.actions";
 import { User } from "../../models/user";
 import { updateScreen } from "../../actions/screen/screen.actions";
 import * as React from "react";
-
+import "../../App.css";
 import HomeUser from "./home-user";
 import HomeAdmin from "./home-admin";
 
 interface IProps {
   user: User;
+  fetchReimbs: (user: User, list: string) => any;
 }
 class Home extends React.Component<IProps, any> {
   constructor(props: any) {
@@ -17,7 +18,9 @@ class Home extends React.Component<IProps, any> {
   }
 
   public render() {
-    if (this.props.user.roleID === 1) {
+    this.props.fetchReimbs(this.props.user, "user");
+    if (this.props.user.roleId === 1) {
+      console.log(this.props.user.roleId);
       return <HomeAdmin />;
     } else {
       return <HomeUser />;

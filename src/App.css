@@ -1,8 +1,42 @@
 .App {
   text-align: center;
   margin: 10%;
+  background: green;
 }
-
+h2 {
+  color: rgb(65, 45, 22);
+  text-align: center;
+  margin-top: 7%;
+  margin-bottom: 3%;
+}
+h3 {
+  color: rgb(65, 45, 22);
+  text-align: center;
+  margin-bottom: 3%;
+}
+tr {
+  color: rgb(65, 45, 22);
+  text-align: center;
+}
+i {
+  color: rgb(65, 45, 22);
+  text-align: center;
+  padding: 5%;
+}
+img {
+  height: 50%;
+  width: 50%;
+  padding: 3%;
+  border: 5%;
+}
+td {
+  color: rgb(65, 45, 22);
+  text-align: center;
+}
+th {
+  color: rgb(65, 45, 22);
+  text-align: center;
+}
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
@@ -14,9 +48,14 @@
   padding: 20px;
   color: white;
 }
-
+body {
+  background-color: rgb(166, 226, 226);
+}
 .App-title {
   font-size: 1.5em;
+}
+sticky-class {
+  position: sticky;
 }
 
 .App-intro {
@@ -33,14 +72,82 @@
 }
 
 .Login {
+  color: rgb(65, 45, 22);
   text-align: center;
   padding-left: 30%;
   padding-right: 30%;
-  padding-top: 15%;
+  padding-top: 5%;
 }
 .Home {
   padding: 10%;
 }
 #errorMessage {
-  color: red;
+  padding: 15px;
+  color: rgb(199, 1, 1);
+  text-align: center;
+}
+
+#amount {
+  text-align: left;
+  width: 500px;
+  color: rgb(22, 17, 1);
+}
+.btn-group {
+  margin-left: 1em;
+  padding-left: 1em;
+  margin-right: 1em;
+  padding-right: 1em;
+}
+
+button {
+  margin-left: 1em;
+  padding-left: 1em;
+  margin-right: 1em;
+  padding-right: 1em;
+}
+tr button {
+  width: 10em;
+}
+
+.dropdown-item {
+  margin: 0em;
+  padding: 0em;
+}
+#main-div {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+table {
+  margin-top: 1em;
+}
+input {
+  text-align: left;
+  margin: 0 auto;
+}
+.form-group {
+  text-align: center;
+  color: rgb(65, 45, 22);
+  text-align: center;
+  align-content: center;
+  align-items: center;
+}
+label {
+  text-align: center;
+}
+span button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#submit-button {
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+#type-button {
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
 }

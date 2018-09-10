@@ -5,7 +5,7 @@ export class User {
   firstName: string;
   lastName: string;
   email: string;
-  roleID: number;
+  roleId: number;
 
   constructor(
     id?: number,
@@ -14,7 +14,7 @@ export class User {
     firstName?: string,
     lastName?: string,
     email?: string,
-    roleID?: number
+    roleId?: number
   ) {
     if (id !== undefined) {
       this.id = id;
@@ -24,8 +24,8 @@ export class User {
     firstName && (this.firstName = firstName);
     lastName && (this.lastName = lastName);
     email && (this.email = email);
-    if (roleID !== undefined) {
-      this.roleID = roleID;
+    if (roleId !== undefined) {
+      this.roleId = roleId;
     }
   }
 }
